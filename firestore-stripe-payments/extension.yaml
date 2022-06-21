@@ -235,6 +235,17 @@ params:
     example: rk_live_1234567890
     required: true
 
+  - param: STRIPE_API_KEY_TEST
+    label: Stripe "Test Mode" API key with restricted access
+    type: secret
+    description: >-
+      What is your Stripe "Test Mode" API key? 
+      We recommend creating a new [restricted key](https://stripe.com/docs/keys#limit-access)
+      with write access only for the "Customers", "Checkout Sessions" and "Customer portal" resources.
+      And read-only access for the "Subscriptions" and "Plans" resources.
+    example: rk_test_1234567890
+    required: true
+
   - param: STRIPE_WEBHOOK_SECRET
     label: Stripe webhook secret
     type: secret

@@ -49,6 +49,7 @@ Before installing this extension, set up the following Firebase services in your
 Then, in the [Stripe Dashboard](https://dashboard.stripe.com):
 
 - Create a new [restricted key](https://stripe.com/docs/keys#limit-access) with write access for the "Customers", "Checkout Sessions" and "Customer portal" resources, and read-only access for the "Subscriptions" and "Plans" resources.
+- Optionally, create another restricted key in _Test Mode_
 
 #### Billing
 
@@ -98,6 +99,7 @@ Starting August 17 2020, you will be billed a small amount (typically less than 
 * **createCheckoutSession:** Creates a Checkout session to collect the customer's payment details.
 
 * **createPortalLink:** Creates links to the customer portal for the user to manage their payment & subscription details.
+  * Pass in `{ isTestMode: true }` to use your _Test Mode_ key
 
 * **handleWebhookEvents:** Handles Stripe webhook events to keep subscription statuses in sync and update custom claims.
 

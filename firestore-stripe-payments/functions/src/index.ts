@@ -28,16 +28,23 @@ import {
 import * as logs from './logs';
 import config from './config';
 
+/**
+ * Notes:
+ * - Not sure if we need a "test" webook secret
+ * - Considered setting a "test" flag globally, but since we just need it for one functioN (createPortalLink), just went with a parameter
+ */
+
 const apiVersion = '2020-08-27';
-const stripe = new Stripe(config.stripeSecretKey, {
-  apiVersion,
-  // Register extension as a Stripe plugin
-  // https://stripe.com/docs/building-plugins#setappinfo
-  appInfo: {
-    name: 'Firebase firestore-stripe-payments',
-    version: '0.2.6',
-  },
-});
+
+// Register extension as a Stripe plugin
+// https://stripe.com/docs/building-plugins#setappinfo
+const appInfo = {
+  name: 'Firebase firestore-stripe-payments',
+  version: '0.2.6',
+};
+
+const stripe = new Stripe(config.stripeSecretKey, { apiVersion, appInfo });
+const stripe_test = new Stripe(config.stripeSecretKey, { apiVersion, appInfo });
 
 admin.initializeApp();
 
@@ -334,7 +341,9 @@ export const createPortalLink = functions.https.onCall(
     const uid = context.auth.uid;
     try {
       if (!uid) throw new Error('Not authenticated!');
-      const { returnUrl: return_url, locale = 'auto', configuration } = data;
+      const { returnUrl: return_url, locale = 'auto', isTestMode = false, configuration } = data;
+      const appStripe = (isTestMode) ? stripe_test : stripe;
+
       // Get stripe customer id
       const customer = (
         await admin
@@ -351,7 +360,7 @@ export const createPortalLink = functions.https.onCall(
       if (configuration) {
         params.configuration = configuration;
       }
-      const session = await stripe.billingPortal.sessions.create(params);
+      const session = await appStripe.billingPortal.sessions.create(params);
       logs.createdBillingPortalLink(uid);
       return session;
     } catch (error) {
