@@ -31,7 +31,7 @@ import config from './config';
 /**
  * Notes:
  * - Not sure if we need a "test" webook secret
- * - Considered setting a "test" flag globally, but since we just need it for one functioN (createPortalLink), just went with a parameter
+ * - Considered setting a "test" flag globally, but since we just need it for one function (createPortalLink), just went with a parameter
  */
 
 const apiVersion = '2020-08-27';
@@ -44,7 +44,7 @@ const appInfo = {
 };
 
 const stripe = new Stripe(config.stripeSecretKey, { apiVersion, appInfo });
-const stripe_test = new Stripe(config.stripeSecretKey, { apiVersion, appInfo });
+const stripe_test = new Stripe(config.stripeSecretKey_Test, { apiVersion, appInfo });
 
 admin.initializeApp();
 
